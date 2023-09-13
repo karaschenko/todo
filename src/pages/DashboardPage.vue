@@ -1,7 +1,10 @@
 <template>
   <div class="todo">
     <header class="todo__header">
-      <user-data></user-data>
+      <div class="container">
+        <user-data></user-data>
+        <router-link class="todo__logout" to="/">Logout</router-link>
+      </div>
     </header>
     <div class="container todo__content">
       <add-todo></add-todo>
@@ -44,6 +47,20 @@ onMounted(() => {
   align-items: center;
   height: 100%;
   min-height: 100vh;
+
+  &__header .container {
+    display: flex;
+  }
+
+  &__logout {
+    all: unset;
+    margin-left: auto;
+    cursor: pointer;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 
   &__header,
   &__footer {

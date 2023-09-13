@@ -8,6 +8,7 @@
           class="login-form__input ui_input"
           type="text"
           id="username"
+          placeholder="Username"
           v-model="formData.username"
           required
         />
@@ -20,6 +21,7 @@
         <input
           type="text"
           id="phoneNumber"
+          placeholder="Phone number"
           class="login-form__input ui_input"
           v-model="formData.phoneNumber"
           required
@@ -53,8 +55,8 @@ const router = useRouter();
 const userStore = useUserStore();
 
 const formData = ref({
-  username: "",
-  phoneNumber: "",
+  username: "Moriah.Stanton",
+  phoneNumber: "024-648-3804",
 });
 
 const usernameError = ref("");
@@ -155,6 +157,14 @@ const validateForm = () => {
       flex-direction: column;
       width: 100%;
       position: relative;
+
+      .ui_input {
+        padding: 10px;
+      }
+
+      .ui_button {
+        padding: 10px 30px;
+      }
     }
 
     &__input {
