@@ -1,0 +1,101 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap");
+@import "variables";
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --base-space: 0.5rem;
+  --base-font-size: 1rem;
+}
+
+@media (max-width: $medium-screen) {
+  :root {
+    --base-space: 0.4rem;
+    --base-font-size: 0.85rem;
+  }
+}
+
+@media (max-width: $small-screen) {
+  :root {
+    --base-space: 0.3rem;
+    --base-font-size: 0.7rem;
+  }
+}
+
+body {
+  font-family: "Roboto", sans-serif;
+  font-size: var(--base-font-size);
+}
+
+h1 {
+  font-size: calc(2 * var(--base-font-size));
+  text-align: center;
+  padding: calc(2 * var(--base-space));
+}
+
+h2 {
+  font-size: calc(1.5 * var(--base-font-size));
+}
+
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: calc(2 * var(--base-space));
+  box-sizing: border-box;
+}
+
+.ui_input {
+  all: unset;
+  box-sizing: border-box;
+  display: flex;
+  font-size: var(--base-font-size);
+  padding: calc(2px + var(--base-space));
+  font-weight: 400;
+  border-radius: 5px;
+  background: #fff;
+  outline: none;
+  border: 1px solid $dark-gray-color;
+}
+
+.ui_select {
+  box-sizing: border-box;
+  display: flex;
+  font-size: var(--base-font-size);
+  padding: calc(2px + var(--base-space));
+  font-weight: 400;
+  border-radius: 5px;
+  background: #fff;
+  outline: none;
+  border: 1px solid $dark-gray-color;
+  cursor: pointer;
+
+  @media (max-width: $small-screen) {
+    min-width: 0;
+  }
+}
+
+.ui_button {
+  outline: none;
+  border: none;
+  padding: var(--base-space) calc(4 * var(--base-space));
+  appearance: none;
+  color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+  background: $primary-color;
+
+  &:hover {
+    opacity: 0.7;
+  }
+
+  &.disabled {
+    background: $dark-gray-color;
+    cursor: not-allowed;
+  }
+}

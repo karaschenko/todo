@@ -1,4 +1,24 @@
-import { createApp } from 'vue'
-import App from './App.vue'
+import { createApp } from "vue";
+import App from "./App.vue";
+import LoginForm from "./pages/LoginForm.vue";
+import Dashboard from "./pages/DashboardPage.vue";
+import { createRouter, createWebHistory } from "vue-router";
+import { createPinia } from "pinia";
+import "./assets/scss/global.scss";
 
-createApp(App).mount('#app')
+const routes = [
+  { path: "/", component: LoginForm },
+  { path: "/dashboard", component: Dashboard },
+];
+
+const router = createRouter({
+  history: createWebHistory(),
+  routes,
+});
+
+const app = createApp(App);
+const pinia = createPinia();
+
+app.use(router);
+app.use(pinia);
+app.mount("#app");
