@@ -55,8 +55,8 @@ const router = useRouter();
 const userStore = useUserStore();
 
 const formData = ref({
-  username: "Moriah.Stanton",
-  phoneNumber: "024-648-3804",
+  username: "",
+  phoneNumber: "",
 });
 
 const usernameError = ref("");
