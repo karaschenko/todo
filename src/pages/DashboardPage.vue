@@ -1,5 +1,6 @@
 <template>
   <div class="todo">
+    <ToastMessage />
     <header class="todo__header">
       <div class="container">
         <user-data></user-data>
@@ -26,6 +27,7 @@ import AddTodo from "@/components/AddTodo.vue";
 import TodoFilter from "@/components/TodoFilter.vue";
 import TodoList from "@/components/TodoList.vue";
 import UserData from "@/components/UserData.vue";
+import ToastMessage from "@/components/ToastMessage.vue";
 
 const router = useRouter();
 const userStore = useUserStore();
@@ -35,6 +37,7 @@ const logout = () => {
   localStorage.removeItem("userData");
   router.push("/");
 };
+
 onMounted(() => {
   userStore.loadUserDataFromLocalStorage();
   if (!userStore.userData.id) {

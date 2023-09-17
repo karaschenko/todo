@@ -13,9 +13,6 @@
         Add
       </button>
     </form>
-    <div v-show="isSuccess" class="add-todo__succes">
-      New todo has been added
-    </div>
   </div>
 </template>
 
@@ -25,7 +22,6 @@ import { useTodosStore } from "@/store/todosStore";
 
 const userId = ref("");
 const title = ref("");
-const isSuccess = ref(false);
 const todosStore = useTodosStore();
 
 const loading = ref(false);
@@ -38,16 +34,20 @@ const addTodo = async () => {
         title: title.value,
       });
       if (newTodo.id) {
-        isSuccess.value = true;
-        setTimeout(() => {
-          isSuccess.value = false;
-        }, 3000);
+        todosStore.addToast({
+          message: "new todo has been added",
+          type: "success",
+        });
       }
       userId.value = "";
       title.value = "";
     }
-  } catch (e) {
-    console.log("error on adding todo: ", e);
+  } catch (error) {
+    console.log("error on adding todo: ", error);
+    todosStore.addToast({
+      message: "error on adding todo",
+      type: "error",
+    });
   }
   loading.value = false;
 };

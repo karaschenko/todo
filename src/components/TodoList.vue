@@ -3,7 +3,18 @@
     <h2 class="todo-list__title">ToDo List</h2>
     <ul v-if="filteredTodos.length > 0" class="todo-list">
       <li class="todo-list__item" v-for="todo in filteredTodos" :key="todo.id">
-        <span :class="{ completed: todo.completed }">{{ todo.title }}</span>
+        <input
+          class="todo-list__checkbox"
+          type="checkbox"
+          :checked="todo.completed"
+          :id="`todo-${todo.id}`"
+          @change="updateTodo($event, todo)"
+        />
+        <label
+          :for="`todo-${todo.id}`"
+          :class="{ completed: todo.completed }"
+          >{{ todo.title }}</label
+        >
         <img
           v-if="todo.favorite"
           class="favorite-img"
@@ -33,10 +44,16 @@
 <script setup>
 import { onMounted } from "vue";
 import { useTodosStore } from "@/store/todosStore";
+import { useUserStore } from "@/store/userStore";
 import { storeToRefs } from "pinia";
+
+import debounce from "@/helpers/debounce";
 
 const todosStore = useTodosStore();
 const { todos, filteredTodos } = storeToRefs(todosStore);
+
+const userStore = useUserStore();
+const { userData } = storeToRefs(userStore);
 
 const addToFavorite = (todoId) => {
   todosStore.setFavorite(todoId);
@@ -52,6 +69,24 @@ const removeFromFavorite = (todoId) => {
   let existingFavorites = JSON.parse(localStorage.getItem("favorites") || "[]");
   existingFavorites = existingFavorites.filter((id) => id !== todoId);
   localStorage.setItem("favorites", JSON.stringify(existingFavorites));
+};
+
+const debouncedUpdateTodo = debounce((todoId, completed) => {
+  todosStore.updateTodo(todoId, completed);
+}, 300);
+
+const updateTodo = (event, todo) => {
+  if (todo.userId !== userData.value.id) {
+    todosStore.addToast({
+      message: "You are not allowed to change todos of other users",
+      type: "error",
+    });
+    event.target.checked = !event.target.checked;
+    return;
+  }
+
+  const completed = event.target.checked;
+  debouncedUpdateTodo(todo.id, completed);
 };
 
 onMounted(async () => {
@@ -92,6 +127,7 @@ onMounted(async () => {
     align-items: center;
     padding: calc(2 * var(--base-space));
     border-bottom: 1px solid #ccc;
+    gap: calc(2 * var(--base-space));
 
     .completed {
       text-decoration: line-through;
@@ -130,7 +166,6 @@ onMounted(async () => {
 
     .favorite-img {
       width: calc(1.2 * var(--base-font-size));
-      margin: 0 calc(2 * var(--base-space));
     }
   }
 }

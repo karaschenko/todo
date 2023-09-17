@@ -4,6 +4,7 @@ export const useTodosStore = defineStore({
   id: "todos",
   state: () => ({
     todos: [],
+    toasts: [],
     titleFilter: "",
     statusFilter: "All",
     userIdFilter: "all",
@@ -45,7 +46,7 @@ export const useTodosStore = defineStore({
       this.todos = data;
     },
     async addTodo(newTodo) {
-      const res = await fetch(`${process.env.VUE_APP_API_URL}/posts`, {
+      const res = await fetch(`${process.env.VUE_APP_API_URL}/todos`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -62,6 +63,31 @@ export const useTodosStore = defineStore({
 
       this.todos.unshift(data);
       return data;
+    },
+    async updateTodo(todoId, completed) {
+      const url = `${process.env.VUE_APP_API_URL}/todos/${todoId}`;
+
+      try {
+        const response = await fetch(url, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ completed }),
+        });
+
+        if (response.ok) {
+          // Update the local state
+          const todo = this.todos.find((t) => t.id === todoId);
+          if (todo) {
+            todo.completed = completed;
+          }
+        } else {
+          console.error("Failed to update todo:", await response.text());
+        }
+      } catch (error) {
+        console.error("An error occurred:", error);
+      }
     },
     setFavorite(todoId) {
       const todo = this.todos.find((t) => t.id === todoId);
@@ -89,6 +115,16 @@ export const useTodosStore = defineStore({
     },
     filterByUserId(userId) {
       this.userIdFilter = userId;
+    },
+    addToast(toast) {
+      this.toasts.push(toast);
+      setTimeout(() => {
+        this.removeToast(0);
+      }, 2000);
+    },
+
+    removeToast(index) {
+      this.toasts.splice(index, 1);
     },
   },
 });

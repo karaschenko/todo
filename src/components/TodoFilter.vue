@@ -22,8 +22,8 @@
         @change="handleUserIdChange"
       >
         <option value="all">All Users</option>
-        <option v-for="id in uniqueUserIds" :key="id" :value="id">
-          {{ id }}
+        <option v-for="id in uniqueUserIds" :key="id" :value="id.value">
+          {{ id.label }}
         </option>
       </select>
     </div>
@@ -44,16 +44,24 @@
 <script setup>
 import { ref, watch, computed } from "vue";
 import { useTodosStore } from "@/store/todosStore";
+import { useUserStore } from "@/store/userStore";
 import debounce from "@/helpers/debounce";
 
 const todosStore = useTodosStore();
+const userStore = useUserStore();
 
 const selectedStatus = ref("All");
 const searchTitle = ref("");
 
 const uniqueUserIds = computed(() => {
   const ids = todosStore.todos.map((todo) => todo.userId);
-  return [...new Set(ids)];
+  const uniqueIds = [...new Set(ids)];
+
+  return uniqueIds.map((id) => ({
+    value: id,
+    label:
+      id === userStore.userData.id ? `${id} (current user)` : id.toString(),
+  }));
 });
 
 const selectedUserId = ref("all");
