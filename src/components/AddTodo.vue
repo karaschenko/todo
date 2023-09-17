@@ -9,8 +9,13 @@
         placeholder="User ID"
       />
       <input class="ui_input title-input" v-model="title" placeholder="Title" />
-      <button class="ui_button">Add</button>
+      <button :disabled="loading" :class="['ui_button', { disabled: loading }]">
+        Add
+      </button>
     </form>
+    <div v-show="isSuccess" class="add-todo__succes">
+      New todo has been added
+    </div>
   </div>
 </template>
 
@@ -20,18 +25,31 @@ import { useTodosStore } from "@/store/todosStore";
 
 const userId = ref("");
 const title = ref("");
+const isSuccess = ref(false);
 const todosStore = useTodosStore();
 
+const loading = ref(false);
 const addTodo = async () => {
-  if (userId.value && title.value) {
-    const newTodo = await todosStore.addTodo({
-      userId: userId.value,
-      title: title.value,
-    });
-    console.log(newTodo);
-    userId.value = "";
-    title.value = "";
+  loading.value = true;
+  try {
+    if (userId.value && title.value) {
+      const newTodo = await todosStore.addTodo({
+        userId: userId.value,
+        title: title.value,
+      });
+      if (newTodo.id) {
+        isSuccess.value = true;
+        setTimeout(() => {
+          isSuccess.value = false;
+        }, 3000);
+      }
+      userId.value = "";
+      title.value = "";
+    }
+  } catch (e) {
+    console.log("error on adding todo: ", e);
   }
+  loading.value = false;
 };
 </script>
 
@@ -63,6 +81,10 @@ const addTodo = async () => {
     .title-input {
       flex-grow: 2;
     }
+  }
+  &__succes {
+    color: #fff;
+    margin-top: calc(2 * var(--base-space));
   }
 }
 </style>

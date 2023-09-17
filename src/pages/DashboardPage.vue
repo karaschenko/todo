@@ -3,7 +3,7 @@
     <header class="todo__header">
       <div class="container">
         <user-data></user-data>
-        <router-link class="todo__logout" to="/">Logout</router-link>
+        <button class="todo__logout" @click="logout">Logout</button>
       </div>
     </header>
     <div class="container todo__content">
@@ -29,6 +29,12 @@ import UserData from "@/components/UserData.vue";
 
 const router = useRouter();
 const userStore = useUserStore();
+
+const logout = () => {
+  const router = useRouter();
+  localStorage.removeItem("userData");
+  router.push("/");
+};
 onMounted(() => {
   userStore.loadUserDataFromLocalStorage();
   if (!userStore.userData.id) {

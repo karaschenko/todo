@@ -75,7 +75,7 @@ const loginHanlder = async () => {
       const foundUser = users.find((user) => {
         const originalPhone = user.phone;
 
-        // sometimes API returns incorrect phone format with 'x' aphter number
+        // sometimes API returns incorrect phone format with 'x' after number
         const cleanedPhone = originalPhone.split(" ")[0];
         return (
           user.username === formData.value.username &&

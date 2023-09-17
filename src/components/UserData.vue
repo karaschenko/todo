@@ -5,7 +5,7 @@
       <span class="details" v-if="!showPopup"> (Show Details) </span>
       <span class="details" v-else> (Hide Details)</span>
     </div>
-    <div v-if="showPopup" class="user-popup">
+    <div v-if="showPopup" class="user-popup" v-click-outside="hidePopup">
       <p><strong>Name:</strong> {{ userData?.name }}</p>
       <p><strong>Email:</strong> {{ userData?.email }}</p>
       <p><strong>Phone:</strong> {{ userData?.phone }}</p>
@@ -24,6 +24,12 @@ import { storeToRefs } from "pinia";
 const userStore = useUserStore();
 const { userData } = storeToRefs(userStore);
 const showPopup = ref(false);
+
+const hidePopup = () => {
+  if (showPopup.value) {
+    showPopup.value = false;
+  }
+};
 </script>
 
 <style lang="scss" scoped>

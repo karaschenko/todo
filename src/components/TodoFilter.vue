@@ -56,7 +56,7 @@ const uniqueUserIds = computed(() => {
   return [...new Set(ids)];
 });
 
-const selectedUserId = ref("all"); // Initial value
+const selectedUserId = ref("all");
 
 const handleUserIdChange = () => {
   todosStore.filterByUserId(selectedUserId.value);
